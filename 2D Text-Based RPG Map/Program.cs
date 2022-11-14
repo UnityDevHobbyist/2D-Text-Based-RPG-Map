@@ -30,10 +30,14 @@ namespace _2D_Text_Based_RPG_Map
         // * = trees
         static void Main(string[] args)
         {
-            int scale = 3;
+            int scale = 8;
             if (scale > 3)
-                Console.SetWindowSize(Clamp(Clamp(scale, 1, 7) * 30 + 1, 31, 240), Console.WindowHeight);
+                Console.SetWindowSize(Clamp(Clamp(scale, 1, 7) * 30 + 1, 31, 240) + 2, 63);
+            if (scale > 7)
+                scale = 7;
+            Border(scale);
             DisplayMap(scale);
+            Border(scale);
             Console.ResetColor();
             Console.ReadLine();
         }
@@ -42,7 +46,7 @@ namespace _2D_Text_Based_RPG_Map
         {
             int cols = map.GetLength(0);
             int rows = map.GetLength(1);
-            //Console.WriteLine(cols);
+
             for (int col = 0; col < cols; col++)
             {
                 for (int row = 0; row < rows; row++)
@@ -59,7 +63,9 @@ namespace _2D_Text_Based_RPG_Map
         {
             int cols = map.GetLength(0);
             int rows = map.GetLength(1);
-            //Console.WriteLine(cols);
+
+            bool debounce = false;
+
             for (int col = 0; col < cols; col++)
             {
                 for (int scale_x = 0; scale_x < scale; scale_x++)
@@ -68,15 +74,25 @@ namespace _2D_Text_Based_RPG_Map
                     {
                         for (int scale_y = 0; scale_y < scale; scale_y++)
                         {
+                            if (row == 0 && !debounce)
+                            {
+                                debounce = true;
+                                Console.ResetColor();
+                                Console.Write("|");
+                            }
                             ChangeColour(map[col, row]);
                             Console.Write(map[col, row]);
+                            if (row == 29 && scale_y == scale - 1)
+                            {
+                                debounce = false;
+                                Console.ResetColor();
+                                Console.Write("|");
+                            }
                         }
                     }
 
                     Console.WriteLine();
                 }
-
-                //Console.WriteLine();
             }
         }
 
@@ -135,6 +151,24 @@ namespace _2D_Text_Based_RPG_Map
         static int Clamp(int value, int min, int max)
         {
             return (value < min) ? min : (value > max) ? max : value;
+        }
+
+        static void Border(int scale)
+        {
+            Console.ResetColor();
+
+            int rows = map.GetLength(1) * scale;
+
+            Console.Write("+");
+
+            for (int row = 0; row < rows; row++)
+            {
+                Console.Write("-");
+            }
+
+            Console.Write("+");
+
+            Console.WriteLine();
         }
     }
 }
