@@ -30,11 +30,12 @@ namespace _2D_Text_Based_RPG_Map
         // * = trees
         static void Main(string[] args)
         {
-            int scale = 8;
+            int scale = 2;
             if (scale > 3)
                 Console.SetWindowSize(Clamp(Clamp(scale, 1, 7) * 30 + 1, 31, 240) + 2, 63);
             if (scale > 7)
-                scale = 7;
+                //scale = 7;
+            Border(scale);
             Border(scale);
             DisplayMap(scale);
             Border(scale);
